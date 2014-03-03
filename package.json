@@ -1,0 +1,31 @@
+{
+  "name": "smart-socket",
+  "version": "0.0.1",
+  "description": "Give an array of address to smart-socket and it will try to connect to each one in series and stop on first success or loop if they all failed",
+  "main": "smart-socket.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/maxleiko/smart-socket.git"
+  },
+  "keywords": [
+    "websocket",
+    "socket",
+    "ws",
+    "async",
+    "loop",
+    "timeout"
+  ],
+  "author": "Maxime Tricoire <max.tricoire@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/maxleiko/smart-socket/issues"
+  },
+  "homepage": "https://github.com/maxleiko/smart-socket",
+  "dependencies": {
+    "async": "^0.2.10",
+    "ws": "^0.4.31"
+  }
+}
