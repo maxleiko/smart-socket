@@ -5,6 +5,7 @@ var SmartSocket = require('../smart-socket');
  */
 SmartSocket({
     addresses:  ['127.0.0.1:8040', '127.0.0.1:8041', '127.0.0.1:8042'],
+    debug: false,
     handlers: {
         onopen: function (ws) {
             console.log('SERVER OPEN CONN', ws.url);
