@@ -7,8 +7,7 @@ SmartSocket({
     addresses:  ['127.0.0.1:8040', '127.0.0.1:8041', '127.0.0.1:8042'],
     handlers: {
         onopen: function (ws) {
-            console.log('SERVER OPEN CONN');
-            ws.send('msg');
+            console.log('SERVER OPEN CONN', ws.url);
         },
         onmessage: function (ws, e) {
             console.log('MESSAGE', e.data);
