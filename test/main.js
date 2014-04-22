@@ -3,7 +3,7 @@ var SmartSocket = require('../smart-socket');
 /**
  * Created by leiko on 03/03/14.
  */
-SmartSocket({
+var ss = new SmartSocket({
     addresses:  ['127.0.0.1:8040', '127.0.0.1:8041', '127.0.0.1:8042'],
     debug: false,
     handlers: {
@@ -18,3 +18,9 @@ SmartSocket({
         }
     }
 });
+
+ss.start();
+
+setTimeout(function () {
+    ss.close();
+}, 5000);
