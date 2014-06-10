@@ -1,5 +1,7 @@
-var WebSocket   = require('ws'),
-    async       = require('async');
+var WebSocket       = require('ws'),
+    async           = require('async'),
+    util            = require('util'),
+    EventEmitter    = require('events').EventEmitter;
 
 var noop = function () {};
 
@@ -13,6 +15,7 @@ var SmartSocket = function (options) {
     this.id         = null;
     this.wsConn     = null;
 
+    // Handlers are DEPRECATED in favor of EventEmitter logic
     var handlers = options.handlers || {};
     this.onopen     = handlers.onopen    || noop;
     this.onclose    = handlers.onclose   || noop;
@@ -23,7 +26,13 @@ var SmartSocket = function (options) {
     this.timeout    = options.timeout   || 10000;
     this.loopBreak  = options.loopBreak || 2000;
     this.debug      = options.debug     || false;
+
+    // prevent default EventEmitter behavior of exiting program when 'error' event are emitted
+    this.on('error', noop);
 };
+
+// Inherit from EventEmitter
+util.inherits(SmartSocket, EventEmitter);
 
 /**
  * Starts the WebSocket connection tasks loop over given addresses
@@ -55,6 +64,7 @@ SmartSocket.prototype.start = function () {
                     this.wasOpen = true;
                     cb(ws);
                     self.onopen.apply(ws, [ws, arg]);
+                    self.emit('open', ws, arg);
                 }.bind(this);
 
                 ws.onerror = function (arg) {
@@ -64,6 +74,7 @@ SmartSocket.prototype.start = function () {
                     }
                     cb(null); // try next
                     self.onerror.apply(ws, [ws, arg]);
+                    self.emit('error', ws, arg);
                 }.bind(this);
 
                 ws.onclose = function (arg) {
@@ -74,6 +85,7 @@ SmartSocket.prototype.start = function () {
                         connectionTasks();
                     }
                     self.onclose.apply(ws, [ws, arg]);
+                    self.emit('close', ws, arg);
                 }.bind(this);
 
                 ws.onmessage = function (arg) {
@@ -81,6 +93,7 @@ SmartSocket.prototype.start = function () {
                         console.log('Message: '+address, arg.data);
                     }
                     self.onmessage.apply(ws, [ws, arg]);
+                    self.emit('message', ws, arg);
                 }
             };
         })(self.addresses[i]))
@@ -94,6 +107,7 @@ SmartSocket.prototype.start = function () {
      * @type {function(this:SmartSocket)}
      */
     var connectionTasks = function () {
+        this.emit('loopStart');
         async.series(tasks, function (connectedWs) {
             if (connectedWs) {
                 // successfully connected (abort connection loop)
@@ -109,6 +123,7 @@ SmartSocket.prototype.start = function () {
                 if (this.debug) {
                     console.log('Retry in '+this.loopBreak+'ms');
                 }
+                this.emit('loopEnd');
                 this.id = setTimeout(function () {
                     connectionTasks();
                 }.bind(this), this.loopBreak);
