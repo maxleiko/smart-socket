@@ -112,6 +112,7 @@ SmartSocket.prototype.start = function () {
             if (connectedWs) {
                 // successfully connected (abort connection loop)
                 this.wsConn = connectedWs;
+                this.emit('loopEnd');
                 return;
             }
 
