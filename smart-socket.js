@@ -51,6 +51,7 @@ SmartSocket.prototype.start = function () {
                 var timeoutID = setTimeout(function () {
                     try {
                         ws.close();
+                        self.emit('error', ws, new Error('Connection timed out ('+self.timeout+'ms)'));
                         cb(null);
                     } catch (ignore) {}
                 }, self.timeout);
@@ -62,9 +63,9 @@ SmartSocket.prototype.start = function () {
                         console.log('Connection to '+address+' established.');
                     }
                     this.wasOpen = true;
-                    cb(ws);
                     self.onopen.apply(ws, [ws, arg]);
                     self.emit('open', ws, arg);
+                    cb(ws);
                 }.bind(this);
 
                 ws.onerror = function (arg) {
@@ -72,9 +73,9 @@ SmartSocket.prototype.start = function () {
                     if (self.debug) {
                         console.log('Error: '+address, arg);
                     }
-                    cb(null); // try next
                     self.onerror.apply(ws, [ws, arg]);
                     self.emit('error', ws, arg);
+                    cb(null); // try next
                 }.bind(this);
 
                 ws.onclose = function (arg) {

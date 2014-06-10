@@ -6,7 +6,8 @@ var SmartSocket = require('../smart-socket');
 var ss = new SmartSocket({
     addresses:  ['127.0.0.1:8040', '127.0.0.1:8041', '127.0.0.1:8042'],
     debug: false,
-    timeout: 5000
+    timeout: 3000,
+    loopBreak: 3000
 });
 
 ss.start();
