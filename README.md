@@ -1,5 +1,9 @@
 # smart-socket
 
+```sh
+npm i smart-socket --save
+```
+
 ## API
 SmartSocket inherits from `events.EventEmitter`  
 
