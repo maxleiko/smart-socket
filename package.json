@@ -1,6 +1,6 @@
 {
   "name": "smart-socket",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Give an array of address to smart-socket and it will try to connect to each one in series and stop on first success or loop if they all failed",
   "main": "smart-socket.js",
   "scripts": {
