@@ -6,8 +6,8 @@ var SmartSocket = require('smart-socket');
 
 var ss = new SmartSocket({
     addresses: ['127.0.0.1:8042'],  // array of addresses to try to connect to (order is kept)
-    timeout: 5042,                  // [optional] will restart the connection loop if all given addresses
-                                    // failed to establish a connection. (default is 2000ms)
+    timeout: 10000,                 // [optional] connection timeout for Web sockets in milliseconds
+    loopBreak: 2000,                // [optional] time between two loops in milliseconds
     handlers: {
         onopen: function (ws, event) {
             // ws: WebSocket object related to the successful connection

@@ -5,7 +5,7 @@ var noop = function () {};
 
 /**
  *
- * @param options {object} Contains {handlers : {}, addresses: [], timeout: number, debug: boolean}
+ * @param options {object} Contains {handlers : {}, addresses: [], timeout: number, loopBreak: number, debug: boolean}
  * @constructor
  */
 var SmartSocket = function (options) {
@@ -20,7 +20,8 @@ var SmartSocket = function (options) {
     this.onmessage  = handlers.onmessage || noop;
 
     this.addresses  = options.addresses || [];
-    this.timeout    = options.timeout   || 2000;
+    this.timeout    = options.timeout   || 10000;
+    this.loopBreak  = options.loopBreak || 2000;
     this.debug      = options.debug     || false;
 };
 
@@ -33,11 +34,21 @@ SmartSocket.prototype.start = function () {
     for (var i=0; i < self.addresses.length; i++) {
         tasks.push((function (address) {
             return function (cb) {
-                if (self.debug) console.log('Trying to connect to ws://'+address);
+                if (self.debug) {
+                    console.log('Trying to connect to ws://'+address);
+                }
+
                 var ws = new WebSocket('ws://'+address);
+                var timeoutID = setTimeout(function () {
+                    try {
+                        ws.close();
+                        cb(null);
+                    } catch (ignore) {}
+                }, self.timeout);
                 this.wasOpen = false;
 
                 ws.onopen = function (arg) {
+                    clearTimeout(timeoutID);
                     if (self.debug) {
                         console.log('Connection to '+address+' established.');
                     }
@@ -47,6 +58,7 @@ SmartSocket.prototype.start = function () {
                 }.bind(this);
 
                 ws.onerror = function (arg) {
+                    clearTimeout(timeoutID);
                     if (self.debug) {
                         console.log('Error: '+address, arg);
                     }
@@ -77,7 +89,7 @@ SmartSocket.prototype.start = function () {
     /**
      * Tries to initiate a WebSocket connection with one of the given addresses
      * Once a connection is active, the loop stops (looping is done in series = one at a time)
-     * If it is unable to connect to one of the given addresses, it will idle for this.timeout milliseconds
+     * If it is unable to connect to one of the given addresses, it will idle for this.loopBreak milliseconds
      * and then restart the connection loop (forever, unless SmartSocket.stop() is called)
      * @type {function(this:SmartSocket)}
      */
@@ -93,13 +105,13 @@ SmartSocket.prototype.start = function () {
             if (this.stopped) {
                 console.log('SmartSocket is stopped, won\'t retry connection!');
             } else {
-                // retry connection attempt in options.timeout milliseconds
+                // retry connection attempt in options.loopBreak milliseconds
                 if (this.debug) {
-                    console.log('Retry in '+this.timeout+'ms');
+                    console.log('Retry in '+this.loopBreak+'ms');
                 }
                 this.id = setTimeout(function () {
                     connectionTasks();
-                }.bind(this), this.timeout);
+                }.bind(this), this.loopBreak);
             }
         }.bind(this));
     }.bind(this);
