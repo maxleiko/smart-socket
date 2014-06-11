@@ -1,10 +1,13 @@
 var SmartSocket = require('../smart-socket');
 
+var a = ['127.0.0.1:8040', '127.0.0.1:8041', '127.0.0.1:8042'],
+    b = ['a.fr', 'b.com', 'kevoree.org'];
+
 /**
  * Created by leiko on 03/03/14.
  */
 var ss = new SmartSocket({
-    addresses:  ['127.0.0.1:8040', '127.0.0.1:8041', '127.0.0.1:8042'],
+    addresses:  b,
     debug: false,
     timeout: 3000,
     loopBreak: 3000
@@ -30,6 +33,7 @@ ss.on('error', function (ws) {
 
 ss.on('loopEnd', function () {
    console.log('loop end');
+    ss.close(true);
 });
 
 //
