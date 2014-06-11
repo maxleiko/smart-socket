@@ -50,9 +50,10 @@ SmartSocket.prototype.start = function () {
                 var ws = new WebSocket('ws://'+address);
                 var timeoutID = setTimeout(function () {
                     try {
+                        if (self.debug) {
+                            console.log('Closing ws://'+address+' connection attempt (smart-socket timeout)');
+                        }
                         ws.close();
-                        self.emit('error', ws, new Error('Connection timed out ('+self.timeout+'ms)'));
-                        cb(null);
                     } catch (ignore) {}
                 }, self.timeout);
                 this.wasOpen = false;
@@ -79,6 +80,7 @@ SmartSocket.prototype.start = function () {
                 }.bind(this);
 
                 ws.onclose = function (arg) {
+                    clearTimeout(timeoutID);
                     if (self.debug) {
                         console.log('Close: '+address, arg);
                     }
