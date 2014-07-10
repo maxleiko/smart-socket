@@ -70,7 +70,7 @@ SmartSocket.prototype.start = function () {
                 }.bind(this);
 
                 ws.onerror = function (arg) {
-                    clearTimeout(timeoutID);
+                    clearTimeout(timeoutID);;
                     if (self.debug) {
                         console.log('Error: '+address, arg.message);
                     }
