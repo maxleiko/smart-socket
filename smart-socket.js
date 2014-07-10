@@ -16,15 +16,15 @@ var SmartSocket = function (options) {
     this.wsConn     = null;
 
     // Handlers are DEPRECATED in favor of EventEmitter logic
-    var handlers = options.handlers || {};
-    this.onopen     = handlers.onopen    || noop;
-    this.onclose    = handlers.onclose   || noop;
-    this.onerror    = handlers.onerror   || noop;
-    this.onmessage  = handlers.onmessage || noop;
+    var handlers = options.handlers || {};
+    this.onopen     = handlers.onopen    || noop;
+    this.onclose    = handlers.onclose   || noop;
+    this.onerror    = handlers.onerror   || noop;
+    this.onmessage  = handlers.onmessage || noop;
 
-    this.addresses  = options.addresses || [];
-    this.timeout    = options.timeout   || 10000;
-    this.loopBreak  = options.loopBreak || 2000;
+    this.addresses  = options.addresses || [];
+    this.timeout    = options.timeout   || 10000;
+    this.loopBreak  = options.loopBreak || 2000;
     this.debug      = options.debug     || false;
 
     // prevent default EventEmitter behavior of exiting program when 'error' event are emitted
