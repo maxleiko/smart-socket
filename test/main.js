@@ -7,10 +7,10 @@ var a = ['127.0.0.1:8040', '127.0.0.1:8041', '127.0.0.1:8042'],
  * Created by leiko on 03/03/14.
  */
 var ss = new SmartSocket({
-    addresses:  b,
+    addresses:  a,
     debug: false,
     timeout: 3000,
-    loopBreak: 3000
+    loopBreak: 10000
 });
 
 ss.start();
@@ -31,9 +31,16 @@ ss.on('error', function (ws) {
     console.log('ERROR', ws.url);
 });
 
+ss.on('loopStart', function () {
+    console.log('loop start');
+});
+
+ss.on('loopIn', function (waitFor) {
+   console.log('loop in, waiting for '+waitFor+'ms before starting again...');
+});
+
 ss.on('loopEnd', function () {
-   console.log('loop end');
-    ss.close(true);
+    console.log('loop end');
 });
 
 //

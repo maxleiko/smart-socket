@@ -70,7 +70,7 @@ SmartSocket.prototype.start = function () {
                 }.bind(this);
 
                 ws.onerror = function (arg) {
-                    clearTimeout(timeoutID);;
+                    clearTimeout(timeoutID);
                     if (self.debug) {
                         console.log('Error: '+address, arg.message);
                     }
@@ -84,11 +84,12 @@ SmartSocket.prototype.start = function () {
                     if (self.debug) {
                         console.log('Close: '+address, arg);
                     }
+                    self.onclose.apply(ws, [ws, arg]);
+                    self.emit('close', ws, arg);
+
                     if (this.wasOpen && !self.stopped) {
                         connectionTasks();
                     }
-                    self.onclose.apply(ws, [ws, arg]);
-                    self.emit('close', ws, arg);
                 }.bind(this);
 
                 ws.onmessage = function (arg) {
@@ -122,19 +123,15 @@ SmartSocket.prototype.start = function () {
             // unable to connect to any of the given server
             if (!this.stopped) {
                 // retry connection attempt in options.loopBreak milliseconds
-                if (this.debug) {
-                    console.log('Retry in '+this.loopBreak+'ms');
-                }
-                this.id = setTimeout(function () {
-                    connectionTasks();
-                }.bind(this), this.loopBreak);
-
-                this.emit('loopEnd');
+                if (this.debug) { console.log('Retry in '+this.loopBreak+'ms'); }
+                setTimeout(connectionTasks, this.loopBreak);
+                // notify that loop has ended
+                this.emit('loopIn', this.loopBreak);
             }
         }.bind(this));
     }.bind(this);
 
-    connectionTasks();
+    process.nextTick(connectionTasks);
 };
 
 /**

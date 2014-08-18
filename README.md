@@ -101,8 +101,11 @@ ss.on('error', function (ws, event) {
 ss.on('loopStart', function () {
   // emitted on loop start
 });
+ss.on('loopIn', function (waitFor) {
+  // emitted when a loop ends but no connection is made (so it will loop again in "waitFor" milliseconds
+});
 ss.on('loopEnd', function () {
-  // emitted on loop end
+  // emitted on loop end (when connection is made though)
 });
 
 ss.start();
