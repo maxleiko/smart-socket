@@ -25,7 +25,7 @@
   },
   "homepage": "https://github.com/maxleiko/smart-socket",
   "dependencies": {
-    "async": "^0.2.10",
-    "ws": "^0.4.31"
+    "async": "^0.9.0",
+    "ws": "^0.4.32"
   }
 }
