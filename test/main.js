@@ -7,10 +7,10 @@ var a = ['127.0.0.1:8040', '127.0.0.1:8041', '127.0.0.1:8042'],
  * Created by leiko on 03/03/14.
  */
 var ss = new SmartSocket({
-    addresses:  a,
+    addresses:  b,
     debug: false,
     timeout: 3000,
-    loopBreak: 10000
+    loopBreak: 2000
 });
 
 ss.start();
