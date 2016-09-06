@@ -19,4 +19,9 @@ WebSocketWrapper.prototype.off = function (event, handler) {
   }
 };
 
+function WebSocketServer() {
+  throw new Error('WebSocketServer are not supported in browser environment.');
+}
+
 module.exports = WebSocketWrapper;
+module.exports.WebSocketServer = WebSocketServer;
