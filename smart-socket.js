@@ -1,7 +1,7 @@
 'use strict';
 
 var WebSocket = require('ws');
-var async = require('async');
+var series = require('async/series');
 var util = require('util');
 var EventEmitter = require('events').EventEmitter;
 
@@ -51,7 +51,7 @@ SmartSocket.prototype.start = function () {
    */
   function connectionTasks() {
     self.emit('loopStart');
-    async.series(tasks, function (connectedWs) {
+    series(tasks, function (connectedWs) {
       if (connectedWs) {
         // successfully connected (abort connection loop)
         self.wsConn = connectedWs;

@@ -11,9 +11,9 @@ WebSocket.prototype.off = function (event, handler) {
   }
 };
 
-function WebSocketServer() {
+function Server() {
   throw new Error('WebSocketServer are not supported in browser environment.');
 }
 
 module.exports = WebSocket;
-module.exports.WebSocketServer = WebSocketServer;
+module.exports.Server = Server;

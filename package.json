@@ -1,6 +1,6 @@
 {
   "name": "smart-socket",
-  "version": "0.4.8",
+  "version": "0.5.0",
   "description": "Give an array of address to smart-socket and it will try to connect to each one in series and stop on first success or loop if they all failed",
   "main": "smart-socket.js",
   "scripts": {
@@ -28,7 +28,7 @@
   },
   "homepage": "https://github.com/maxleiko/smart-socket",
   "dependencies": {
-    "async": "^1.5.2",
+    "async": "^2.0.0",
     "bufferutil": "^1.2.1",
     "utf-8-validate": "^1.2.1",
     "ws": "^1.1.1"
