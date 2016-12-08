@@ -31,8 +31,8 @@
     "async": "^2.0.0",
     "ws": "^1.1.1"
   },
-	"optionalDependencies": {
-		"bufferutil": "^1.2.1",
+  "optionalDependencies": {
+    "bufferutil": "^1.2.1",
     "utf-8-validate": "^1.2.1"
-	}
+  }
 }
